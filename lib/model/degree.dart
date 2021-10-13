@@ -1,0 +1,4 @@
+enum Degree {
+  F,
+  C
+}
