@@ -15,6 +15,7 @@ class AddMeasurementPage extends StatefulWidget {
 
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
   final _controller = TextEditingController();
+  final inputTempFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +78,14 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       style: const TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.w700,
-
                       ),
-                      onChanged: (_) => setState(() {}),
+                      onEditingComplete: () => setState(() {
+                        _controller.text = _controller.text.replaceAllMapped(RegExp(r'(\d\d)(\d)'), (match) {
+                          return '${match.group(1)}.${match.group(2)}';
+                        });
+                        FocusScope.of(context).unfocus();
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      }),
                       controller: _controller,
                       keyboardType: TextInputType.number,
                       maxLength: 4,
@@ -108,6 +114,31 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 ),
                 //TODO: to make a switch widget from F to C
               ],
+            ),
+            const SizedBox(height: 28),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                      const AddMeasurementPage(),
+                    )
+                );
+              },
+              child: const Text('Save',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),),
+              style: ElevatedButton.styleFrom(
+                  primary: MyColors.orange,
+                  fixedSize: const Size(327, 60),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  )
+              ),
             ),
           ],
         ),
