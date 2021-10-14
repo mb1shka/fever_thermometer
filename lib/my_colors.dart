@@ -7,4 +7,5 @@ class MyColors {
   static Color green = const Color.fromRGBO(50, 225, 47, 1);
   static Color red = const Color.fromRGBO(255, 72, 14, 1);
   static Color grey = const Color.fromRGBO(157, 154, 150, 1);
+  static Color lightGrey = const Color.fromRGBO(247, 247, 247, 1);
 }

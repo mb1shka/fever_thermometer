@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:temperature/custom_icons.dart';
+import 'dart:math' as math;
+
+import 'package:temperature/my_colors.dart';
 
 class AddMeasurementPage extends StatefulWidget {
   const AddMeasurementPage({Key? key}) : super(key: key);
@@ -9,11 +14,104 @@ class AddMeasurementPage extends StatefulWidget {
 }
 
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(),
+      body: SafeArea(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Transform.rotate(
+                    angle: 180 * math.pi / 180,
+                    child: IconButton(
+                      icon: const Icon(
+                        CustomIcons.disclosure,
+                        color: Colors.black,
+                        size: 16,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 78,
+                  ),
+                  Text(
+                    'New measurement',
+                    style: TextStyle(
+                      color: MyColors.grey,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 45),
+            SvgPicture.asset('assets/svg/thermometer.svg'),
+            const SizedBox(height: 10),
+            const Text(
+              'Enter your data',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(38, 0, 12, 0),
+                  child: SizedBox(
+                    height: 75,
+                    width: 145,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w700,
+
+                      ),
+                      onChanged: (_) => setState(() {}),
+                      controller: _controller,
+                      keyboardType: TextInputType.number,
+                      maxLength: 4,
+                      decoration:  InputDecoration(
+                        counterStyle: const TextStyle(
+                          height: double.minPositive,
+                        ),
+                        counterText: "",
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: MyColors.grey),
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        border: InputBorder.none,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: MyColors.grey),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: '00.0',
+                        filled: true,
+                        fillColor: MyColors.lightGrey,
+                      ),
+                    ),
+                  ),
+                ),
+                //TODO: to make a switch widget from F to C
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
-
 }

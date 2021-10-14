@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:temperature/my_colors.dart';
 import 'package:temperature/custom_icons.dart';
+import 'package:temperature/pages/add_measurement_page.dart';
 
 class MyTemperaturePage extends StatefulWidget {
   const MyTemperaturePage({Key? key}) : super(key: key);
@@ -104,7 +105,14 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                       )),
                   const SizedBox(height: 36),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                const AddMeasurementPage(),
+                            )
+                        ),
                     child: const Text('+ Add',
                     style: TextStyle(
                       fontSize: 20,
