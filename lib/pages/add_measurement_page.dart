@@ -2,9 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:temperature/custom_icons.dart';
+import 'package:temperature/database/temperature_data_base.dart';
+import 'package:temperature/model/degree.dart';
+import 'package:temperature/model/health.dart';
+import 'package:temperature/model/measurement_fields.dart';
+import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
 
 import 'package:temperature/my_colors.dart';
+import 'package:temperature/pages/additional_data.dart';
 
 class AddMeasurementPage extends StatefulWidget {
   const AddMeasurementPage({Key? key}) : super(key: key);
@@ -16,6 +22,9 @@ class AddMeasurementPage extends StatefulWidget {
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
   final _controller = TextEditingController();
   final inputTempFocus = FocusNode();
+  String _comment = ' ';
+  List<Symptoms> symptoms = [];
+  String notes = ' ';
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +89,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         fontWeight: FontWeight.w700,
                       ),
                       onEditingComplete: () => setState(() {
-                        _controller.text = _controller.text.replaceAllMapped(RegExp(r'(\d\d)(\d)'), (match) {
+                        _controller.text = _controller.text
+                            .replaceAllMapped(RegExp(r'(\d\d)(\d)'), (match) {
                           return '${match.group(1)}.${match.group(2)}';
                         });
                         FocusScope.of(context).unfocus();
@@ -89,14 +99,15 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       controller: _controller,
                       keyboardType: TextInputType.number,
                       maxLength: 4,
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         counterStyle: const TextStyle(
                           height: double.minPositive,
                         ),
                         counterText: "",
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: MyColors.grey),
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                         ),
                         border: InputBorder.none,
                         focusedBorder: OutlineInputBorder(
@@ -117,28 +128,40 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
             ),
             const SizedBox(height: 28),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                setState(() {
+                  _comment = _controller.text;
+                });
+                await TemperatureDataBase.instance.create(Measurement(
+                  //temperature: _comment as int,
+                  temperature: 0,
+                  //TODO
+                  degree: Degree.F,
+                  health: Health.normal,
+                  symptoms: symptoms,
+                  notes: notes,
+                  dateTime: DateTime.now(),
+                ));
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                      const AddMeasurementPage(),
-                    )
-                );
+                      builder: (_) => AdditionalData(),
+                    ));
               },
-              child: const Text('Save',
+              child: const Text(
+                'Save',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                ),),
+                ),
+              ),
               style: ElevatedButton.styleFrom(
                   primary: MyColors.orange,
                   fixedSize: const Size(327, 60),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
-                  )
-              ),
+                  )),
             ),
           ],
         ),

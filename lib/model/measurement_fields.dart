@@ -87,40 +87,9 @@ class Measurement {
     List<Symptoms> symptomsList = [];
     var values = string.split(',');
     for (int i = 0; i < values.length; i++) {
-      switch (values[i]) {
-        case 'soreThroat':
-          symptomsList.add(Symptoms.soreThroat);
-          break;
-        case 'fever':
-          symptomsList.add(Symptoms.fever);
-          break;
-        case 'dizziness':
-          symptomsList.add(Symptoms.dizziness);
-          break;
-        case 'fatigue':
-          symptomsList.add(Symptoms.fatigue);
-          break;
-        case 'headache':
-          symptomsList.add(Symptoms.headache);
-          break;
-        case 'cough':
-          symptomsList.add(Symptoms.cough);
-          break;
-        case 'runnyNose':
-          symptomsList.add(Symptoms.runnyNose);
-          break;
-        case 'sneeze':
-          symptomsList.add(Symptoms.sneeze);
-          break;
-        case 'nausea':
-          symptomsList.add(Symptoms.nausea);
-          break;
-        case 'lossOfAppetite':
-          symptomsList.add(Symptoms.lossOfAppetite);
-          break;
-        case 'musclePain':
-          symptomsList.add(Symptoms.musclePain);
-          break;
+      final symptoms = SymptomsExt.fromString(values[i]);
+      if (symptoms != null) {
+        symptomsList.add(symptoms);
       }
     }
     return symptomsList;
