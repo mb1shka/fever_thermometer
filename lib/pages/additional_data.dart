@@ -5,6 +5,7 @@ import 'package:temperature/model/symptom_model.dart';
 import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
@@ -50,6 +51,7 @@ class _AdditionalDataState extends State<AdditionalData> {
   bool _isNormal = false;
   bool _isBad = false;
 
+  final _pageController = PageController(viewportFraction: 1.0, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +258,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                 SizedBox(
                   height: 240,
                   child: PageView(
+                    controller: _pageController,
                     children: [
                       SizedBox(
                         height: 240,
@@ -300,6 +303,21 @@ class _AdditionalDataState extends State<AdditionalData> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 14),
+                Center(
+                  child: SmoothPageIndicator(
+                    //activeIndex: 2,
+                    controller: _pageController,
+                    count: 2,
+                    effect: ColorTransitionEffect(
+                      dotColor: MyColors.grey,
+                      activeDotColor: MyColors.purple,
+                      dotHeight: 14,
+                      dotWidth: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 52),
                 Text(
                   'Notes',
                   style: TextStyle(
