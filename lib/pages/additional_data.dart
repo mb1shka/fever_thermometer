@@ -396,6 +396,45 @@ class _AdditionalDataState extends State<AdditionalData> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 32),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      /*setState(() {
+                      });
+                      await TemperatureDataBase.instance.create(Measurement(
+                        //temperature: _comment as int,
+                        temperature: 0,
+                        //TODO
+                        degree: Degree.F,
+                        health: Health.normal,
+                        symptoms: symptoms,
+                        notes: notes,
+                        dateTime: DateTime.now(),
+                      ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AdditionalData(_comment),
+                          ));*/
+                    },
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: MyColors.orange,
+                        fixedSize: const Size(327, 60),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        )),
+                  ),
+                ),
+                const SizedBox(height: 25),
               ],
             ),
           ),
