@@ -145,7 +145,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => AdditionalData(),
+                      builder: (_) => AdditionalData(_comment),
                     ));
               },
               child: const Text(
