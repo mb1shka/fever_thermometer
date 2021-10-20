@@ -317,7 +317,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 52),
+                const SizedBox(height: 20),
                 Text(
                   'Notes',
                   style: TextStyle(
