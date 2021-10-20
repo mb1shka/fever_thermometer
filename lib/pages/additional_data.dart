@@ -130,6 +130,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
                           width: 80,
@@ -179,8 +180,8 @@ class _AdditionalDataState extends State<AdditionalData> {
                               _isBad = false;
                             }),
                             child: _isNormal == true
-                                ? SvgPicture.asset('assets/svg/normal.svg')
-                                : SvgPicture.asset('assets/svg/normal_selected.svg'),
+                                ? SvgPicture.asset('assets/svg/normal_selected.svg')
+                                : SvgPicture.asset('assets/svg/normal.svg'),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.resolveWith<
                                   RoundedRectangleBorder>(
