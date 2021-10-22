@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:temperature/model/degree.dart';
 import 'package:temperature/model/symptom_model.dart';
 import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
@@ -11,9 +12,10 @@ import '../custom_icons.dart';
 import '../my_colors.dart';
 
 class AdditionalData extends StatefulWidget {
-  AdditionalData(this.temperatureMeasurement);
+  AdditionalData(this.temperatureMeasurement, this.degree);
 
   final String temperatureMeasurement;
+  final Degree degree;
 
   @override
   State<StatefulWidget> createState() => _AdditionalDataState();
@@ -56,99 +58,146 @@ class _AdditionalDataState extends State<AdditionalData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(3, 16, 0, 0),
-                  child: Row(
-                    children: [
-                      Transform.rotate(
-                        angle: 180 * math.pi / 180,
-                        child: IconButton(
-                          icon: const Icon(
-                            CustomIcons.disclosure,
-                            color: Colors.black,
-                            size: 16,
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  MyColors.blandPurple,
+                  const Color(0xFFFFFFFF),
+                ]
+            )
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(3, 16, 0, 0),
+                    child: Row(
+                      children: [
+                        Transform.rotate(
+                          angle: 180 * math.pi / 180,
+                          child: IconButton(
+                            icon: const Icon(
+                              CustomIcons.disclosure,
+                              color: Colors.black,
+                              size: 16,
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 78,
-                      ),
-                      Text(
-                        'Additional data',
-                        style: TextStyle(
-                          color: MyColors.grey,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
+                        const SizedBox(
+                          width: 78,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 50),
-                Center(
-                    child: Text(
-                  widget.temperatureMeasurement + ' °F',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 36,
-                  ),
-                )),
-                const SizedBox(height: 8),
-                Center(
-                  child: Text(
-                    'Today, ' + DateFormat.jm().format(_dateTime),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
+                        Text(
+                          'Additional data',
+                          style: TextStyle(
+                            color: MyColors.grey,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 38),
-                Text(
-                  'Choose health',
-                  style: TextStyle(
-                    color: MyColors.purple,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(height: 50),
+                  Center(
+                      child: Text(
+                    widget.temperatureMeasurement+ ' ' + getDegree(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 36,
+                    ),
+                  )),
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Text(
+                      'Today, ' + DateFormat.jm().format(_dateTime),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                  const SizedBox(height: 38),
+                  Text(
+                    'Choose health',
+                    style: TextStyle(
+                      color: MyColors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: _isGood
-                                ? null
-                                : () => setState(() {
-                                      _isGood = true;
-                                      _isNormal = false;
-                                      _isBad = false;
-                                    }),
-                            child: _isGood == true
-                                ? SvgPicture.asset('assets/svg/good.svg')
-                                : SvgPicture.asset('assets/svg/good_selected.svg'),
-                            style: ButtonStyle(
+                  const SizedBox(height: 12),
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF7F7F7),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: _isGood
+                                  ? null
+                                  : () => setState(() {
+                                        _isGood = true;
+                                        _isNormal = false;
+                                        _isBad = false;
+                                      }),
+                              child: _isGood == true
+                                  ? SvgPicture.asset('assets/svg/good.svg')
+                                  : SvgPicture.asset('assets/svg/good_selected.svg'),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                          (Set<MaterialState> states) {
+                                        return RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(18.0),
+                                          side: const BorderSide(color: Colors.white),
+                                        );
+                                      }),
+                                backgroundColor: MaterialStateProperty
+                                    .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.disabled)) {
+                                            return MyColors.green;
+                                          }
+                                          return Colors.white;
+                                        },
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: _isNormal
+                                  ? null
+                                  : () => setState(() {
+                                _isGood = false;
+                                _isNormal = true;
+                                _isBad = false;
+                              }),
+                              child: _isNormal == true
+                                  ? SvgPicture.asset('assets/svg/normal_selected.svg')
+                                  : SvgPicture.asset('assets/svg/normal.svg'),
+                              style: ButtonStyle(
                                 shape: MaterialStateProperty.resolveWith<
                                     RoundedRectangleBorder>(
                                         (Set<MaterialState> states) {
@@ -158,302 +207,273 @@ class _AdditionalDataState extends State<AdditionalData> {
                                         side: const BorderSide(color: Colors.white),
                                       );
                                     }),
-                              backgroundColor: MaterialStateProperty
-                                  .resolveWith<Color>(
+                                backgroundColor: MaterialStateProperty
+                                    .resolveWith<Color>(
                                       (Set<MaterialState> states) {
-                                        if (states.contains(MaterialState.disabled)) {
-                                          return MyColors.green;
-                                        }
-                                        return Colors.white;
-                                      },
+                                    if (states.contains(MaterialState.disabled)) {
+                                      return MyColors.yellow;
+                                    }
+                                    return Colors.white;
+                                  },
+                                ),
                               ),
                             ),
                           ),
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: _isBad
+                                  ? null
+                                  : () => setState(() {
+                                _isGood = false;
+                                _isNormal = false;
+                                _isBad = true;
+                              }),
+                              child: _isBad == true
+                                  ? SvgPicture.asset('assets/svg/bad.svg')
+                                  : SvgPicture.asset('assets/svg/bad_selected.svg'),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.resolveWith<
+                                    RoundedRectangleBorder>(
+                                        (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(18.0),
+                                        side: const BorderSide(color: Colors.white),
+                                      );
+                                    }),
+                                backgroundColor: MaterialStateProperty
+                                    .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                    if (states.contains(MaterialState.disabled)) {
+                                      return MyColors.red;
+                                    }
+                                    return Colors.white;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Symptoms',
+                    style: TextStyle(
+                      color: MyColors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    decoration: BoxDecoration(
+                    color: Color(0xFFF7F7F7),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                    height: 240,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          height: 240,
+                          child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: List.generate(
+                                  _symptomModelsFirstList.length,
+                                  (index) => ChoiceChip(
+                                        label: Text(_symptomModelsFirstList[index]
+                                                .symptom
+                                                ?.asString() ??
+                                            ' '),
+                                        selected: _symptomModelsFirstList[index]
+                                            .isSelected,
+                                        onSelected: (isSelected) =>
+                                            _onSymptomSelectedFirstList(
+                                                isSelected, index),
+                                      ))),
                         ),
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: _isNormal
-                                ? null
-                                : () => setState(() {
-                              _isGood = false;
-                              _isNormal = true;
-                              _isBad = false;
-                            }),
-                            child: _isNormal == true
-                                ? SvgPicture.asset('assets/svg/normal_selected.svg')
-                                : SvgPicture.asset('assets/svg/normal.svg'),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.resolveWith<
-                                  RoundedRectangleBorder>(
-                                      (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(18.0),
-                                      side: const BorderSide(color: Colors.white),
-                                    );
-                                  }),
-                              backgroundColor: MaterialStateProperty
-                                  .resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return MyColors.yellow;
-                                  }
-                                  return Colors.white;
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: _isBad
-                                ? null
-                                : () => setState(() {
-                              _isGood = false;
-                              _isNormal = false;
-                              _isBad = true;
-                            }),
-                            child: _isBad == true
-                                ? SvgPicture.asset('assets/svg/bad.svg')
-                                : SvgPicture.asset('assets/svg/bad_selected.svg'),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.resolveWith<
-                                  RoundedRectangleBorder>(
-                                      (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(18.0),
-                                      side: const BorderSide(color: Colors.white),
-                                    );
-                                  }),
-                              backgroundColor: MaterialStateProperty
-                                  .resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return MyColors.red;
-                                  }
-                                  return Colors.white;
-                                },
-                              ),
-                            ),
-                          ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          height: 240,
+                          child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: List.generate(
+                                  _symptomModelsSecondList.length,
+                                  (index) => ChoiceChip(
+                                        label: Text(
+                                            _symptomModelsSecondList[index]
+                                                    .symptom
+                                                    ?.asString() ??
+                                                ' '),
+                                        selected: _symptomModelsSecondList[index]
+                                            .isSelected,
+                                        onSelected: (isSelected) =>
+                                            _onSymptomSelectedSecondList(
+                                                isSelected, index),
+                                      ))),
                         ),
                       ],
                     ),
                   ),
-                ),
-                Text(
-                  'Symptoms',
-                  style: TextStyle(
-                    color: MyColors.purple,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 240,
-                  child: PageView(
-                    controller: _pageController,
-                    children: [
-                      SizedBox(
-                        height: 240,
-                        child: Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: List.generate(
-                                _symptomModelsFirstList.length,
-                                (index) => ChoiceChip(
-                                      label: Text(_symptomModelsFirstList[index]
-                                              .symptom
-                                              ?.asString() ??
-                                          ' '),
-                                      selected: _symptomModelsFirstList[index]
-                                          .isSelected,
-                                      onSelected: (isSelected) =>
-                                          _onSymptomSelectedFirstList(
-                                              isSelected, index),
-                                    ))),
+                  const SizedBox(height: 14),
+                  Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: 2,
+                      effect: ColorTransitionEffect(
+                        dotColor: MyColors.grey,
+                        activeDotColor: MyColors.purple,
+                        dotHeight: 14,
+                        dotWidth: 14,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        height: 240,
-                        child: Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: List.generate(
-                                _symptomModelsSecondList.length,
-                                (index) => ChoiceChip(
-                                      label: Text(
-                                          _symptomModelsSecondList[index]
-                                                  .symptom
-                                                  ?.asString() ??
-                                              ' '),
-                                      selected: _symptomModelsSecondList[index]
-                                          .isSelected,
-                                      onSelected: (isSelected) =>
-                                          _onSymptomSelectedSecondList(
-                                              isSelected, index),
-                                    ))),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Center(
-                  child: SmoothPageIndicator(
-                    //activeIndex: 2,
-                    controller: _pageController,
-                    count: 2,
-                    effect: ColorTransitionEffect(
-                      dotColor: MyColors.grey,
-                      activeDotColor: MyColors.purple,
-                      dotHeight: 14,
-                      dotWidth: 14,
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Notes',
-                  style: TextStyle(
-                    color: MyColors.purple,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  height: 110,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: TextField(
+                  const SizedBox(height: 20),
+                  Text(
+                    'Notes',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: MyColors.grey,
-                    ),
-                    onChanged: (_) => setState(() {}),
-                    maxLength: 140,
-                    controller: _vaccineController,
-                    decoration: InputDecoration(
-                      suffixText:
-                          (140 - _vaccineController.text.length).toString(),
-                      counterStyle: const TextStyle(
-                        height: double.minPositive,
-                      ),
-                      counterText: "",
-                      enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      border: InputBorder.none,
-                      /*
-                      focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10))),*/
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintText: 'Type here',
-                      filled: true,
-                      fillColor: Colors.white,
+                      color: MyColors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ),
-                Text(
-                  'Vaccine',
-                  style: TextStyle(
-                    color: MyColors.purple,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: TextField(
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: MyColors.grey,
+                  const SizedBox(height: 12),
+                  Container(
+                    height: 110,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
                     ),
-                    onChanged: (_) => setState(() {}),
-                    maxLength: 140,
-                    controller: _notesController,
-                    decoration: InputDecoration(
-                      suffixText:
-                          (140 - _notesController.text.length).toString(),
-                      counterStyle: const TextStyle(
-                        height: double.minPositive,
-                      ),
-                      counterText: "",
-                      enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      border: InputBorder.none,
-                      /*
-                      focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10))),*/
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintText: 'Type here',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      /*setState(() {
-                      });
-                      await TemperatureDataBase.instance.create(Measurement(
-                        //temperature: _comment as int,
-                        temperature: 0,
-                        //TODO
-                        degree: Degree.F,
-                        health: Health.normal,
-                        symptoms: symptoms,
-                        notes: notes,
-                        dateTime: DateTime.now(),
-                      ));
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AdditionalData(_comment),
-                          ));*/
-                    },
-                    child: const Text(
-                      'Save',
+                    child: TextField(
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: MyColors.grey,
+                      ),
+                      onChanged: (_) => setState(() {}),
+                      maxLength: 140,
+                      controller: _vaccineController,
+                      decoration: InputDecoration(
+                        suffixText:
+                            (140 - _vaccineController.text.length).toString(),
+                        counterStyle: const TextStyle(
+                          height: double.minPositive,
+                        ),
+                        counterText: "",
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        border: InputBorder.none,
+                        /*
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),*/
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: 'Type here',
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: MyColors.orange,
-                        fixedSize: const Size(327, 60),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        )),
                   ),
-                ),
-                const SizedBox(height: 25),
-              ],
+                  const SizedBox(height: 24),
+                  Text(
+                    'Vaccine',
+                    style: TextStyle(
+                      color: MyColors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: MyColors.grey,
+                      ),
+                      onChanged: (_) => setState(() {}),
+                      maxLength: 140,
+                      controller: _notesController,
+                      decoration: InputDecoration(
+                        suffixText:
+                            (140 - _notesController.text.length).toString(),
+                        counterStyle: const TextStyle(
+                          height: double.minPositive,
+                        ),
+                        counterText: "",
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        border: InputBorder.none,
+                        /*
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),*/
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: 'Type here',
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        /*setState(() {
+                        });
+                        await TemperatureDataBase.instance.create(Measurement(
+                          //temperature: _comment as int,
+                          temperature: 0,
+                          //TODO
+                          degree: Degree.F,
+                          health: Health.normal,
+                          symptoms: symptoms,
+                          notes: notes,
+                          dateTime: DateTime.now(),
+                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AdditionalData(_comment),
+                            ));*/
+                      },
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: MyColors.orange,
+                          fixedSize: const Size(327, 60),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                ],
+              ),
             ),
           ),
         ),
@@ -471,5 +491,13 @@ class _AdditionalDataState extends State<AdditionalData> {
     setState(() {
       _symptomModelsSecondList[index].isSelected = isSelected;
     });
+  }
+
+  String getDegree() {
+    if (widget.degree == Degree.C) {
+      return '°C';
+    } else {
+      return '°F';
+    }
   }
 }

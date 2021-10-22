@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:temperature/my_colors.dart';
-import 'package:temperature/pages/my_temperature_page.dart';
+import 'package:temperature/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const MyTemperaturePage(),
+      home: const HomePage(),
     );
   }
 
