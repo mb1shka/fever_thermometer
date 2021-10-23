@@ -139,7 +139,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                   Container(
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Color(0xFFF7F7F7),
+                      color: const Color(0xFFF7F7F7),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Padding(

@@ -4,6 +4,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:temperature/my_colors.dart';
 import 'package:temperature/custom_icons.dart';
 import 'package:temperature/pages/my_temperature_page.dart';
+import 'package:temperature/pages/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> tabs = [
     const Text('History'),
     const MyTemperaturePage(),
-    const Text('Settings'),
+    const SettingsPage(),
   ];
 
   @override
