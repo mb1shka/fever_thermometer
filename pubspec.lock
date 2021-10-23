@@ -156,6 +156,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slider_gradient:
+    dependency: "direct main"
+    description:
+      name: slider_gradient
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   sliding_up_panel:
     dependency: "direct main"
     description:

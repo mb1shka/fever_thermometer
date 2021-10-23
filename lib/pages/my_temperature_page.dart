@@ -8,6 +8,7 @@ import 'package:temperature/model/health.dart';
 import 'package:temperature/model/measurement_fields.dart';
 import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
+import 'package:slider_gradient/slider_gradient.dart';
 
 import 'package:temperature/my_colors.dart';
 import 'package:temperature/pages/additional_data.dart';
@@ -29,20 +30,24 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
   bool isC = true;
   bool isF = false;
 
+  double val1 = 34;
+  double val2 = 44;
+
+  String tempValue = '34.00';
+  String tempValueF = '93.00';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              colors: [
-                MyColors.blandPurple,
-                const Color(0xFFFFFFFF),
-              ]
-          )
-        ),
+            gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+              MyColors.blandPurple,
+              const Color(0x006D73E1),
+            ])),
         child: SafeArea(
           child: Center(
             child: Column(
@@ -59,51 +64,117 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                     fontSize: 18,
                   ),
                 ),
-                const SizedBox(height: 57),
-                SizedBox(
-                  height: 75,
-                  width: 145,
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    onEditingComplete: () => setState(() {
-                      _controller.text = _controller.text
-                          .replaceAllMapped(RegExp(r'(\d\d)(\d)'), (match) {
-                        return '${match.group(1)}.${match.group(2)}';
-                      });
-                      FocusScope.of(context).unfocus();
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    }),
-                    controller: _controller,
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
-                    decoration: InputDecoration(
-                      counterStyle: const TextStyle(
-                        height: double.minPositive,
+                const SizedBox(height: 65),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24.0),
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              CustomIcons.minus,
+                              color: MyColors.purple,
+                              size: 2,
+                            ),
+                          ),
+                        ),
                       ),
-                      counterText: "",
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: MyColors.grey),
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            isC ? tempValue : tempValueF,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 36,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          isF ? Text(
+                            ' °F',
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                color: MyColors.grey),
+                          ) :
+                          Text(
+                            ' °C',
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                color: MyColors.grey),
+                          ),
+                        ],
                       ),
-                      border: InputBorder.none,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: MyColors.grey),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintText: '00.0',
-                      filled: true,
-                      fillColor: MyColors.lightGrey,
-                    ),
+                      Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24.0),
+                          color: Colors.white,
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            CustomIcons.plus,
+                            color: MyColors.orange,
+                            size: 15,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 27),
-                SvgPicture.asset('assets/svg/union.svg'),
+                const SizedBox(height: 35),
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: SvgPicture.asset('assets/svg/union.svg'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 35, 8, 0),
+                      child: SliderGradient(
+                        thumbStyle: const ThumbStyle(
+                          borderColor: Colors.white,
+                          width: 32,
+                          height: 32,
+                          radius: 18,
+                        ),
+                        sliderStyle: const SliderStyle(
+                          height: 5,
+                        ),
+                        min: 34,
+                        max: 44,
+                        isShowLabel: true,
+                        value: val1,
+                        onChange: (valData) {
+                          setState(() {
+                            val1 = valData.value;
+                            tempValue = valData.value.toString();
+                            tempValueF = countF(valData.value).toStringAsFixed(2);
+                          });
+                        },
+                        colors: [
+                          MyColors.purple,
+                          MyColors.green,
+                          MyColors.yellow,
+                          MyColors.red,
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 31),
                 Container(
                   height: 60,
@@ -124,7 +195,8 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                                     isF = false;
                                     degree = Degree.C;
                                   }),
-                          child: const Text('°C',
+                          child: const Text(
+                            '°C',
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -150,22 +222,21 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                               (states) => const Size(64, 52),
                             ),
                             foregroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
+                                MaterialStateProperty.resolveWith<Color>(
                                     (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return Colors.black;
-                                  }
-                                  return MyColors.grey;
-                                }),
+                              if (states.contains(MaterialState.disabled)) {
+                                return Colors.black;
+                              }
+                              return MyColors.grey;
+                            }),
                             elevation:
-                            MaterialStateProperty.resolveWith<double>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return 0.0;
-                                  }
-                                  return 0.0;
-                                }
-                            ),
+                                MaterialStateProperty.resolveWith<double>(
+                                    (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.disabled)) {
+                                return 0.0;
+                              }
+                              return 0.0;
+                            }),
                           ),
                         ),
                       ),
@@ -175,11 +246,12 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                           onPressed: isF
                               ? null
                               : () => setState(() {
-                            isF = true;
-                            isC = false;
-                            degree = Degree.F;
-                          }),
-                          child: const Text('°F',
+                                    isF = true;
+                                    isC = false;
+                                    degree = Degree.F;
+                                  }),
+                          child: const Text(
+                            '°F',
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -213,14 +285,13 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                               },
                             ),
                             elevation:
-                            MaterialStateProperty.resolveWith<double>(
+                                MaterialStateProperty.resolveWith<double>(
                                     (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return 0.0;
-                                  }
-                                  return 0.0;
-                                }
-                            ),
+                              if (states.contains(MaterialState.disabled)) {
+                                return 0.0;
+                              }
+                              return 0.0;
+                            }),
                           ),
                         ),
                       ),
@@ -246,7 +317,7 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => AdditionalData(_comment, degree),
+                          builder: (_) => AdditionalData(tempValue, degree),
                         ));
                   },
                   child: const Text(
@@ -288,5 +359,8 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
         ),
       ),
     );
+  }
+  double countF(double value) {
+    return value * 9/5 + 32;
   }
 }
