@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:temperature/database/temperature_data_base.dart';
 import 'package:temperature/model/degree.dart';
+import 'package:temperature/model/health.dart';
+import 'package:temperature/model/measurement_fields.dart';
 import 'package:temperature/model/symptom_model.dart';
 import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:temperature/pages/history_page.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
@@ -45,6 +49,8 @@ class _AdditionalDataState extends State<AdditionalData> {
     SymptomModel(symptom: Symptoms.lossOfAppetite),
     SymptomModel(symptom: Symptoms.sleepDisorder),
   ];
+
+  List<Symptoms> _listForDataBase = [];
   final DateTime _dateTime = DateTime.now();
   final _notesController = TextEditingController();
   final _vaccineController = TextEditingController();
@@ -371,11 +377,6 @@ class _AdditionalDataState extends State<AdditionalData> {
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(10))),
                         border: InputBorder.none,
-                        /*
-                        focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10))),*/
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: 'Type here',
@@ -420,11 +421,6 @@ class _AdditionalDataState extends State<AdditionalData> {
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(10))),
                         border: InputBorder.none,
-                        /*
-                        focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10))),*/
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: 'Type here',
@@ -436,24 +432,22 @@ class _AdditionalDataState extends State<AdditionalData> {
                   const SizedBox(height: 32),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        /*setState(() {
+                      onPressed: () async {
+                        setState(() {
                         });
                         await TemperatureDataBase.instance.create(Measurement(
-                          //temperature: _comment as int,
-                          temperature: 0,
-                          //TODO
+                          temperature: widget.temperatureMeasurement as int,
                           degree: Degree.F,
                           health: Health.normal,
-                          symptoms: symptoms,
-                          notes: notes,
+                          symptoms: _save(),
+                          notes: _notesController.text,
                           dateTime: DateTime.now(),
                         ));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => AdditionalData(_comment),
-                            ));*/
+                              builder: (_) => const HistoryPage(),
+                            ));
                       },
                       child: const Text(
                         'Save',
@@ -491,6 +485,20 @@ class _AdditionalDataState extends State<AdditionalData> {
     setState(() {
       _symptomModelsSecondList[index].isSelected = isSelected;
     });
+  }
+
+  List<Symptoms> _save() {
+    for (int i = 0; i < _symptomModelsFirstList.length; i++) {
+      if (_symptomModelsFirstList[i].isSelected) {
+        _listForDataBase.add(_symptomModelsFirstList[i].symptom!);
+      }
+    }
+    for (int i = 0; i < _symptomModelsSecondList.length; i++) {
+      if (_symptomModelsSecondList[i].isSelected) {
+        _listForDataBase.add(_symptomModelsSecondList[i].symptom!);
+      }
+    }
+    return _listForDataBase;
   }
 
   String getDegree() {
