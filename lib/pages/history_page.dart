@@ -78,7 +78,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             FocusScope.of(context).requestFocus(FocusNode());
                           }),
                           keyboardType: TextInputType.number,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 29,
                             fontWeight: FontWeight.w400,
                             color: Colors.black

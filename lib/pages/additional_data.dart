@@ -271,7 +271,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                   const SizedBox(height: 12),
                   Container(
                     decoration: BoxDecoration(
-                    color: Color(0xFFF7F7F7),
+                    color: const Color(0xFFF7F7F7),
                     borderRadius: BorderRadius.circular(18),
                   ),
                     height: 240,

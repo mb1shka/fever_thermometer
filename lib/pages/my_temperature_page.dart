@@ -102,6 +102,8 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 27),
+                SvgPicture.asset('assets/svg/union.svg'),
                 const SizedBox(height: 31),
                 Container(
                   height: 60,
@@ -207,7 +209,7 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                                 if (states.contains(MaterialState.disabled)) {
                                   return const Color(0xFFFDFDFD);
                                 }
-                                return Color(0xFFF7F7F7);
+                                return const Color(0xFFF7F7F7);
                               },
                             ),
                             elevation:

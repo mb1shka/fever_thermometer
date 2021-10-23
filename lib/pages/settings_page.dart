@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:temperature/custom_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:temperature/listeners/settings_listener.dart';
 
 import '../my_colors.dart';
 
@@ -13,9 +15,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _isMale = false;
-  bool _isFemale = false;
-  bool _isOther = false;
 
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
@@ -69,12 +68,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                        onPressed: _isMale
+                        onPressed: context.watch<SettingsListener>().getMale
                             ? null
                             : () => setState(() {
-                                  _isMale = true;
-                                  _isFemale = false;
-                                  _isOther = false;
+                                  _changeForMale();
                                 }),
                         child: const Text('Male',
                           style: TextStyle(
@@ -114,12 +111,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       const SizedBox(width: 14.67),ElevatedButton(
-                        onPressed: _isFemale
+                        onPressed: context.watch<SettingsListener>().getFemale
                             ? null
                             : () => setState(() {
-                          _isMale = false;
-                          _isFemale = true;
-                          _isOther = false;
+                          _changeForFemale();
                         }),
                         child: const Text('Female',
                           style: TextStyle(
@@ -160,12 +155,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       const SizedBox(width: 14.67),
                       ElevatedButton(
-                        onPressed: _isOther
+                        onPressed: context.watch<SettingsListener>().getOther
                             ? null
                             : () => setState(() {
-                          _isMale = false;
-                          _isFemale = false;
-                          _isOther = true;
+                          _changeForOther();
                         }),
                         child: const Text('Other',
                           style: TextStyle(
@@ -202,6 +195,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 }
                                 return Colors.black;
                               }),
+
                         ),
                       ),
                     ],
@@ -233,6 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 color: MyColors.grey,
                               ),
                               controller: _heightController,
+                              //onChanged: heightListener(),
                               maxLength: 5,
                               decoration: InputDecoration(
                                 counterStyle: const TextStyle(
@@ -250,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     BorderRadius.all(Radius.circular(18))),
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
-                                hintText: 'Enter your height',
+                                hintText: 'Enter your height', //context.watch<SettingsListener>().getHeight,
                                 hintStyle: TextStyle(
                                   color: MyColors.grey,
                                   fontSize: 18,
@@ -493,4 +488,19 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+  void _changeForMale() {
+    context.read<SettingsListener>().changeForMale();
+  }
+  void _changeForFemale() {
+    context.read<SettingsListener>().changeForFemale();
+  }
+  void _changeForOther() {
+    context.read<SettingsListener>().changeForOther();
+  }
+
+  /*heightListener() {
+    context.read<SettingsListener>().changeHeight(_heightController.text);
+  }*/
+
 }
