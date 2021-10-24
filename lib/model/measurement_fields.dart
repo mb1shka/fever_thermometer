@@ -18,7 +18,7 @@ class MeasurementFields {
 }
 
 class Measurement {
-  final int temperature;
+  final double temperature;
   final Degree degree;
   final Health health;
   final List<Symptoms> symptoms;
@@ -35,7 +35,7 @@ class Measurement {
   });
 
   Measurement copy({
-    int? temperature,
+    double? temperature,
     Degree? degree,
     Health? health,
     List<Symptoms>? symptoms,
@@ -52,7 +52,7 @@ class Measurement {
       );
 
   static Measurement fromJson(Map<String, Object?> json) => Measurement(
-      temperature: json[MeasurementFields.temperature] as int,
+      temperature: forceDouble(json[MeasurementFields.temperature] as num),
       degree: parseDegree(json[MeasurementFields.degree] as String),
       health: parseHealth(json[MeasurementFields.health] as String),
       symptoms: parseSymptoms(json[MeasurementFields.symptoms] as String),
@@ -61,11 +61,15 @@ class Measurement {
           .fromMillisecondsSinceEpoch(json[MeasurementFields.dateTime] as int),
   );
 
+  static double forceDouble(num i) {
+    return i.toDouble();
+  }
+
   static Degree parseDegree(String string) {
     switch (string) {
-      case 'F':
+      case 'Degree.F':
         return Degree.F;
-      case 'C':
+      case 'Degree.C':
         return Degree.C;
     }
     return Degree.C;

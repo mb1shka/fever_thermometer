@@ -14,6 +14,7 @@ import 'package:temperature/pages/history_page.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
+import 'home_page.dart';
 
 class AdditionalData extends StatefulWidget {
   AdditionalData(this.temperatureMeasurement, this.degree);
@@ -58,6 +59,7 @@ class _AdditionalDataState extends State<AdditionalData> {
   bool _isGood = false;
   bool _isNormal = false;
   bool _isBad = false;
+  Health health = Health.normal;
 
   final _pageController = PageController(viewportFraction: 1.0, keepPage: true);
 
@@ -163,6 +165,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                                         _isGood = true;
                                         _isNormal = false;
                                         _isBad = false;
+                                        health = Health.good;
                                       }),
                               child: _isGood == true
                                   ? SvgPicture.asset('assets/svg/good.svg')
@@ -199,6 +202,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                                 _isGood = false;
                                 _isNormal = true;
                                 _isBad = false;
+                                health = Health.normal;
                               }),
                               child: _isNormal == true
                                   ? SvgPicture.asset('assets/svg/normal_selected.svg')
@@ -235,6 +239,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                                 _isGood = false;
                                 _isNormal = false;
                                 _isBad = true;
+                                health = Health.bad;
                               }),
                               child: _isBad == true
                                   ? SvgPicture.asset('assets/svg/bad.svg')
@@ -433,21 +438,16 @@ class _AdditionalDataState extends State<AdditionalData> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
-                        setState(() {
-                        });
                         await TemperatureDataBase.instance.create(Measurement(
-                          temperature: widget.temperatureMeasurement as int,
-                          degree: Degree.F,
-                          health: Health.normal,
+                          temperature: _parseToDouble(widget.temperatureMeasurement),
+                          degree: widget.degree,
+                          health: health,
                           symptoms: _save(),
                           notes: _notesController.text,
                           dateTime: DateTime.now(),
                         ));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HistoryPage(),
-                            ));
+                        //Navigator.pop(context);
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
                       },
                       child: const Text(
                         'Save',
@@ -507,5 +507,11 @@ class _AdditionalDataState extends State<AdditionalData> {
     } else {
       return '°F';
     }
+  }
+
+  double _parseToDouble(String text) {
+    var myDouble = double.parse(text);
+    assert(myDouble is double);
+    return myDouble;
   }
 }

@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:temperature/database/temperature_data_base.dart';
+import 'package:temperature/model/history_element.dart';
+import 'package:temperature/model/measurement_fields.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
@@ -25,11 +30,9 @@ class _HistoryPageState extends State<HistoryPage> {
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
                   colors: [
-                    MyColors.blandPurple,
-                    const Color(0xFFFFFFFF),
-                  ]
-              )
-          ),
+                MyColors.blandPurple,
+                const Color(0xFFFFFFFF),
+              ])),
           child: SafeArea(
             child: Column(
               children: [
@@ -53,12 +56,14 @@ class _HistoryPageState extends State<HistoryPage> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 20, 0),
                   child: Row(
                     children: [
-                      Icon(CustomIcons.temperature,
+                      Icon(
+                        CustomIcons.temperature,
                         size: 20,
                         color: MyColors.orange,
                       ),
                       const SizedBox(width: 6),
-                      const Text('My normal temperature is',
+                      const Text(
+                        'My normal temperature is',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -71,7 +76,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         child: TextField(
                           onEditingComplete: () => setState(() {
                             _controller.text = _controller.text
-                                .replaceAllMapped(RegExp(r'(\d\d)(\d)'), (match) {
+                                .replaceAllMapped(RegExp(r'(\d\d)(\d)'),
+                                    (match) {
                               return '${match.group(1)}.${match.group(2)}';
                             });
                             FocusScope.of(context).unfocus();
@@ -79,10 +85,9 @@ class _HistoryPageState extends State<HistoryPage> {
                           }),
                           keyboardType: TextInputType.number,
                           style: const TextStyle(
-                            fontSize: 29,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black
-                          ),
+                              fontSize: 29,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black),
                           controller: _controller,
                           maxLength: 5,
                           decoration: InputDecoration(
@@ -92,13 +97,14 @@ class _HistoryPageState extends State<HistoryPage> {
                             counterText: "",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18)),
                             ),
                             border: InputBorder.none,
                             focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(18))),
+                                    BorderRadius.all(Radius.circular(18))),
                             errorBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             hintText: '00.0 °',
@@ -114,6 +120,27 @@ class _HistoryPageState extends State<HistoryPage> {
                     ],
                   ),
                 ),
+                Column(
+                  children: [
+                    FutureBuilder<List<Measurement>>(
+                      future: TemperatureDataBase.instance.readAll(),
+                      builder: (BuildContext context, AsyncSnapshot<List<Measurement>> snapshot) {
+                        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                            HistoryElement(snapshot.data![index]),
+                                // ListTile(
+                                //   title: Text(jsonEncode(snapshot.data![index])),
+                                // ),
+                            itemCount: snapshot.data!.length,
+                          );
+                        }
+                        return const SizedBox();
+                      }
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -122,4 +149,15 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
+  Widget getHistoryElements(List<Measurement> measurements) {
+    List<Widget> elements = [];
+
+    for (var i = 0; i < measurements.length; i++) {
+      elements.add(HistoryElement(measurements[i]));
+    }
+    return ListView.builder(
+      itemBuilder: (context, index) => elements[index],
+      itemCount: measurements.length,
+    );
+  }
 }

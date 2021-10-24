@@ -42,8 +42,8 @@ class TemperatureDataBase {
 
   Future<Measurement> create(Measurement measurement) async {
     final db = await instance.database;
-
-    await db.insert(tableMeasurements, measurement.toJson());
+    final jsonMeasurement = measurement.toJson();
+    await db.insert(tableMeasurements, jsonMeasurement);
     return measurement.copy();
   }
 

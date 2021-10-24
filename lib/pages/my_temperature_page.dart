@@ -21,9 +21,7 @@ class MyTemperaturePage extends StatefulWidget {
 }
 
 class _MyTemperaturePageState extends State<MyTemperaturePage> {
-  final _controller = TextEditingController();
   final inputTempFocus = FocusNode();
-  String _comment = ' ';
   List<Symptoms> symptoms = [];
   String notes = ' ';
   Degree degree = Degree.C;
@@ -301,7 +299,7 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                 const SizedBox(height: 36),
                 ElevatedButton(
                   onPressed: () async {
-                    setState(() {
+                    /*setState(() {
                       _comment = _controller.text;
                     });
                     await TemperatureDataBase.instance.create(Measurement(
@@ -313,11 +311,14 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                       symptoms: symptoms,
                       notes: notes,
                       dateTime: DateTime.now(),
-                    ));
+                    ));*/
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => AdditionalData(tempValue, degree),
+                          builder: (_) => AdditionalData(
+                              isC ? tempValue : tempValueF,
+                              degree
+                          ),
                         ));
                   },
                   child: const Text(
