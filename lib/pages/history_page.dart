@@ -120,9 +120,10 @@ class _HistoryPageState extends State<HistoryPage> {
                     ],
                   ),
                 ),
-                Column(
-                  children: [
-                    FutureBuilder<List<Measurement>>(
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 90),
+                    child: FutureBuilder<List<Measurement>>(
                       future: TemperatureDataBase.instance.readAll(),
                       builder: (BuildContext context, AsyncSnapshot<List<Measurement>> snapshot) {
                         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -139,7 +140,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         return const SizedBox();
                       }
                     ),
-                  ],
+                  ),
                 )
               ],
             ),

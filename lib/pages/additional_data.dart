@@ -10,7 +10,6 @@ import 'package:temperature/model/symptoms.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:temperature/pages/history_page.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
@@ -370,10 +369,10 @@ class _AdditionalDataState extends State<AdditionalData> {
                       ),
                       onChanged: (_) => setState(() {}),
                       maxLength: 140,
-                      controller: _vaccineController,
+                      controller: _notesController,
                       decoration: InputDecoration(
                         suffixText:
-                            (140 - _vaccineController.text.length).toString(),
+                            (140 - _notesController.text.length).toString(),
                         counterStyle: const TextStyle(
                           height: double.minPositive,
                         ),
@@ -414,10 +413,10 @@ class _AdditionalDataState extends State<AdditionalData> {
                       ),
                       onChanged: (_) => setState(() {}),
                       maxLength: 140,
-                      controller: _notesController,
+                      controller: _vaccineController,
                       decoration: InputDecoration(
                         suffixText:
-                            (140 - _notesController.text.length).toString(),
+                            (140 - _vaccineController.text.length).toString(),
                         counterStyle: const TextStyle(
                           height: double.minPositive,
                         ),

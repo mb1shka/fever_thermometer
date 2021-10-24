@@ -77,11 +77,11 @@ class Measurement {
 
   static Health parseHealth(String string) {
     switch (string) {
-      case 'good':
+      case 'Health.good':
         return Health.good;
-      case 'normal':
+      case 'Health.normal':
         return Health.normal;
-      case 'bad':
+      case 'Health.bad':
         return Health.bad;
     }
     return Health.normal;

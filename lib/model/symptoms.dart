@@ -24,43 +24,43 @@ extension SymptomsExt on Symptoms {
 
   static Symptoms? fromString(String value) {
     switch (value) {
-      case 'abdominalDiscomfort':
+      case 'Symptoms.abdominalDiscomfort':
         return Symptoms.abdominalDiscomfort;
-      case 'bradycardia':
+      case 'Symptoms.bradycardia':
         return Symptoms.bradycardia;
-      case 'bodyAchesAndPains':
+      case 'Symptoms.bodyAchesAndPains':
         return Symptoms.bodyAchesAndPains;
-      case 'chill':
+      case 'Symptoms.chill':
         return Symptoms.chill;
-      case 'cough':
+      case 'Symptoms.cough':
         return Symptoms.cough;
-      case 'drowsiness':
+      case 'Symptoms.drowsiness':
         return Symptoms.drowsiness;
-      case 'dizziness':
+      case 'Symptoms.dizziness':
         return Symptoms.dizziness;
-      case 'headache':
+      case 'Symptoms.headache':
         return Symptoms.headache;
-      case 'fever':
+      case 'Symptoms.fever':
         return Symptoms.fever;
-      case 'hoarseness':
+      case 'Symptoms.hoarseness':
         return Symptoms.hoarseness;
-      case 'highBloodPressure':
+      case 'Symptoms.highBloodPressure':
         return Symptoms.highBloodPressure;
-      case 'irritability':
+      case 'Symptoms.irritability':
         return Symptoms.irritability;
-      case 'migraine':
+      case 'Symptoms.migraine':
         return Symptoms.migraine;
-      case 'nausea':
+      case 'Symptoms.nausea':
         return Symptoms.nausea;
-      case 'rash':
+      case 'Symptoms.rash':
         return Symptoms.rash;
-      case 'shortnessOfBreath':
+      case 'Symptoms.shortnessOfBreath':
         return Symptoms.shortnessOfBreath;
-      case 'rapidPulse':
+      case 'Symptoms.rapidPulse':
         return Symptoms.rapidPulse;
-      case 'lossOfAppetite':
+      case 'Symptoms.lossOfAppetite':
         return Symptoms.lossOfAppetite;
-      case 'sleepDisorder':
+      case 'Symptoms.sleepDisorder':
         return Symptoms.sleepDisorder;
     }
   }
