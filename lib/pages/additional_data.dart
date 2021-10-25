@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,7 +52,7 @@ class _AdditionalDataState extends State<AdditionalData> {
   ];
 
   List<Symptoms> _listForDataBase = [];
-  final DateTime _dateTime = DateTime.now();
+  DateTime _dateTime = DateTime.now();
   final _notesController = TextEditingController();
   final _vaccineController = TextEditingController();
 
@@ -61,6 +62,8 @@ class _AdditionalDataState extends State<AdditionalData> {
   Health health = Health.normal;
 
   final _pageController = PageController(viewportFraction: 1.0, keepPage: true);
+
+  bool _isDateChanged = false;
 
   @override
   Widget build(BuildContext context) {
@@ -123,15 +126,51 @@ class _AdditionalDataState extends State<AdditionalData> {
                     ),
                   )),
                   const SizedBox(height: 8),
-                  Center(
-                    child: Text(
-                      'Today, ' + DateFormat.jm().format(_dateTime),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _isDateChanged ?
+                      Text(
+                        DateFormat('MMM d, HH:mm a').format(_dateTime),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                        ),
+                      ) :
+                      Text(
+                        'Today, ' + DateFormat.jm().format(_dateTime),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.19),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              _showDatePicker(context);
+                              setState(() {
+                                _isDateChanged = true;
+                              });
+                            },
+                            icon: Icon(
+                              CustomIcons.pen,
+                              color: MyColors.purple,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(height: 38),
                   Text(
@@ -443,7 +482,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                           health: health,
                           symptoms: _save(),
                           notes: _notesController.text,
-                          dateTime: DateTime.now(),
+                          dateTime: _dateTime,
                         ));
                         //Navigator.pop(context);
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
@@ -512,5 +551,35 @@ class _AdditionalDataState extends State<AdditionalData> {
     var myDouble = double.parse(text);
     assert(myDouble is double);
     return myDouble;
+  }
+
+  void _showDatePicker(ctx) {
+    // showCupertinoModalPopup is a built-in function of the cupertino library
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+          height: 500,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: 400,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now(),
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        _dateTime = val;
+                      });
+                    }),
+              ),
+
+              // Close the modal
+              CupertinoButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        ));
   }
 }
