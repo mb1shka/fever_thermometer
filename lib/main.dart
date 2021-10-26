@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:temperature/my_colors.dart';
 import 'package:temperature/pages/home_page.dart';

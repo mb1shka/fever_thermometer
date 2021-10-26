@@ -3,23 +3,22 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:temperature/database/temperature_data_base.dart';
+import 'package:temperature/model/group_by_date_time.dart';
 import 'package:temperature/model/history_element.dart';
 import 'package:temperature/model/measurement_fields.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
 
-typedef MeasurementGroupByDate = Map<DateTime, List<Measurement>>;
+typedef MeasurementGroupByDate = List<MeasurementBatch>;
 
-extension AddMeasurment on MeasurementGroupByDate {
-  void addMeasurement(DateTime dateTime, Measurement measurement) {
-    if (this[dateTime] != null) {
-      this[dateTime]!.add(measurement);
-      return;
-    }
-    this[dateTime] = [measurement];
-  }
+class MeasurementBatch {
+  final DateTime date;
+  final List<Measurement> measurements;
+
+  MeasurementBatch(this.date, this.measurements);
 }
 
 extension DateOnlyCompare on DateTime {
@@ -90,50 +89,53 @@ class _HistoryPageState extends State<HistoryPage> {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      SizedBox(
-                        height: 53,
-                        width: 93,
-                        child: TextField(
-                          onEditingComplete: () => setState(() {
-                            _controller.text = _controller.text
-                                .replaceAllMapped(RegExp(r'(\d\d)(\d)'),
-                                    (match) {
-                              return '${match.group(1)}.${match.group(2)}';
-                            });
-                            FocusScope.of(context).unfocus();
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          }),
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                              fontSize: 29,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                          controller: _controller,
-                          maxLength: 5,
-                          decoration: InputDecoration(
-                            counterStyle: const TextStyle(
-                              height: double.minPositive,
-                            ),
-                            counterText: "",
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(18)),
-                            ),
-                            border: InputBorder.none,
-                            focusedBorder: const OutlineInputBorder(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: SizedBox(
+                          height: 53,
+                          width: 93,
+                          child: TextField(
+                            onEditingComplete: () => setState(() {
+                              _controller.text = _controller.text
+                                  .replaceAllMapped(RegExp(r'(\d\d)(\d)'),
+                                      (match) {
+                                return '${match.group(1)}.${match.group(2)}';
+                              });
+                              FocusScope.of(context).unfocus();
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            }),
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(
+                                fontSize: 29,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black),
+                            controller: _controller,
+                            maxLength: 5,
+                            decoration: InputDecoration(
+                              counterStyle: const TextStyle(
+                                height: double.minPositive,
+                              ),
+                              counterText: "",
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(18))),
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintText: '00.0 °',
-                            hintStyle: TextStyle(
-                              color: MyColors.grey,
-                              fontSize: 25,
+                                    BorderRadius.all(Radius.circular(18)),
+                              ),
+                              border: InputBorder.none,
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18))),
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: '00.0 °',
+                              hintStyle: TextStyle(
+                                color: MyColors.grey,
+                                fontSize: 25,
+                              ),
+                              filled: true,
+                              fillColor: MyColors.lightGrey,
                             ),
-                            filled: true,
-                            fillColor: MyColors.lightGrey,
                           ),
                         ),
                       ),
@@ -150,17 +152,12 @@ class _HistoryPageState extends State<HistoryPage> {
                         //но она будет создавать мапу
                       builder: (BuildContext context, AsyncSnapshot<MeasurementGroupByDate> snapshot) {
                         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                          /*return ListView.builder(
+                          return ListView.builder(
                             shrinkWrap: true,
                             itemBuilder: (context, index) =>
-                            //меняем хистори элемент на дайтшрупхисториэлемент
-                            //в нем рендер даты плюс список хистори элементов за эту дату
-                            HistoryElement(snapshot.data![index]),
-                                // ListTile(
-                                //   title: Text(jsonEncode(snapshot.data![index])),
-                                // ),
+                            GroupByDateTime(dateTime: snapshot.data![index].date, measurements: snapshot.data![index].measurements),
                             itemCount: snapshot.data!.length,
-                          );*/
+                          );
                         }
                         return const SizedBox();
                       }
@@ -176,15 +173,17 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<MeasurementGroupByDate> getHistoryElementsGroupByDate() async {
-    MeasurementGroupByDate measurementGroupByDate = {};
+    MeasurementGroupByDate measurementGroupByDate = [];
     var measurements = await TemperatureDataBase.instance.readAll();
 
     DateTime? dateTime;
     for (final measurement in measurements) {
       if (dateTime == null || !dateTime.isSameDate(measurement.dateTime)) {
         dateTime = measurement.dateTime;
+        measurementGroupByDate.add(MeasurementBatch(measurement.dateTime, [measurement]));
+        continue;
       }
-      measurementGroupByDate.addMeasurement(dateTime, measurement);
+      measurementGroupByDate.last.measurements.add(measurement);
     }
     return measurementGroupByDate;
   }

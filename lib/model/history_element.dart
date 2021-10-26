@@ -18,7 +18,7 @@ class HistoryElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 8),
       decoration: BoxDecoration(
         color: MyColors.lightGrey,
         borderRadius: const BorderRadius.all(Radius.circular(18.0)),
