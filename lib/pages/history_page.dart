@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,25 @@ import 'package:temperature/model/measurement_fields.dart';
 
 import '../custom_icons.dart';
 import '../my_colors.dart';
+
+typedef MeasurementGroupByDate = Map<DateTime, List<Measurement>>;
+
+extension AddMeasurment on MeasurementGroupByDate {
+  void addMeasurement(DateTime dateTime, Measurement measurement) {
+    if (this[dateTime] != null) {
+      this[dateTime]!.add(measurement);
+      return;
+    }
+    this[dateTime] = [measurement];
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month
+        && day == other.day;
+  }
+}
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -123,19 +143,24 @@ class _HistoryPageState extends State<HistoryPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 90),
-                    child: FutureBuilder<List<Measurement>>(
-                      future: TemperatureDataBase.instance.readAll(),
-                      builder: (BuildContext context, AsyncSnapshot<List<Measurement>> snapshot) {
+                    child: FutureBuilder<MeasurementGroupByDate>(
+                      future: //TemperatureDataBase.instance.readAll(),
+                      getHistoryElementsGroupByDate(),
+                      // меняю на другую функцию, которая будет так же выгружать все из базы данных,
+                        //но она будет создавать мапу
+                      builder: (BuildContext context, AsyncSnapshot<MeasurementGroupByDate> snapshot) {
                         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                          return ListView.builder(
+                          /*return ListView.builder(
                             shrinkWrap: true,
                             itemBuilder: (context, index) =>
+                            //меняем хистори элемент на дайтшрупхисториэлемент
+                            //в нем рендер даты плюс список хистори элементов за эту дату
                             HistoryElement(snapshot.data![index]),
                                 // ListTile(
                                 //   title: Text(jsonEncode(snapshot.data![index])),
                                 // ),
                             itemCount: snapshot.data!.length,
-                          );
+                          );*/
                         }
                         return const SizedBox();
                       }
@@ -150,15 +175,17 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget getHistoryElements(List<Measurement> measurements) {
-    List<Widget> elements = [];
+  Future<MeasurementGroupByDate> getHistoryElementsGroupByDate() async {
+    MeasurementGroupByDate measurementGroupByDate = {};
+    var measurements = await TemperatureDataBase.instance.readAll();
 
-    for (var i = 0; i < measurements.length; i++) {
-      elements.add(HistoryElement(measurements[i]));
+    DateTime? dateTime;
+    for (final measurement in measurements) {
+      if (dateTime == null || !dateTime.isSameDate(measurement.dateTime)) {
+        dateTime = measurement.dateTime;
+      }
+      measurementGroupByDate.addMeasurement(dateTime, measurement);
     }
-    return ListView.builder(
-      itemBuilder: (context, index) => elements[index],
-      itemCount: measurements.length,
-    );
+    return measurementGroupByDate;
   }
 }
