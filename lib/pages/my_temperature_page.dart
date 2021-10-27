@@ -31,8 +31,8 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
   double val1 = 34;
   double val2 = 44;
 
-  String tempValue = '34.00';
-  String tempValueF = '93.00';
+  String tempValue = '34.0';
+  String tempValueF = '93.0';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,12 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                tempValue = minus(tempValue);
+                                tempValueF = minus(tempValueF);
+                              });
+                            },
                             icon: Icon(
                               CustomIcons.minus,
                               color: MyColors.purple,
@@ -98,20 +103,21 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          isF ? Text(
-                            ' °F',
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                color: MyColors.grey),
-                          ) :
-                          Text(
-                            ' °C',
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                color: MyColors.grey),
-                          ),
+                          isF
+                              ? Text(
+                                  ' °F',
+                                  style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
+                                      color: MyColors.grey),
+                                )
+                              : Text(
+                                  ' °C',
+                                  style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
+                                      color: MyColors.grey),
+                                ),
                         ],
                       ),
                       Container(
@@ -122,7 +128,12 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                           color: Colors.white,
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              tempValue = plus(tempValue);
+                              tempValueF = plus(tempValueF);
+                            });
+                            },
                           icon: Icon(
                             CustomIcons.plus,
                             color: MyColors.orange,
@@ -159,8 +170,9 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                         onChange: (valData) {
                           setState(() {
                             val1 = valData.value;
-                            tempValue = valData.value.toString();
-                            tempValueF = countF(valData.value).toStringAsFixed(2);
+                            tempValue = valData.value.toStringAsFixed(1);
+                            tempValueF =
+                                countF(valData.value).toStringAsFixed(1);
                           });
                         },
                         colors: [
@@ -316,9 +328,7 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => AdditionalData(
-                              isC ? tempValue : tempValueF,
-                              degree
-                          ),
+                              isC ? tempValue : tempValueF, degree),
                         ));
                   },
                   child: const Text(
@@ -361,7 +371,32 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
       ),
     );
   }
+
   double countF(double value) {
-    return value * 9/5 + 32;
+    return value * 9 / 5 + 32;
+  }
+
+  String plus(String value) {
+    var myDouble = double.parse(value);
+    if (isC == true && myDouble >= 44.0) {
+      return myDouble.toStringAsFixed(1);
+    }
+    if (isF == true && myDouble >= 111.2) {
+      return myDouble.toStringAsFixed(1);
+    }
+    myDouble += 0.1;
+    return myDouble.toStringAsFixed(1);
+  }
+
+  String minus(String value) {
+    var myDouble = double.parse(value);
+    if (isC == true && myDouble <= 34.0) {
+      return myDouble.toStringAsFixed(1);
+    }
+    if (isF == true && myDouble <= 93.2) {
+      return myDouble.toStringAsFixed(1);
+    }
+    myDouble -= 0.1;
+    return myDouble.toStringAsFixed(1);
   }
 }
