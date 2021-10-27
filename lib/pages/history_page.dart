@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:temperature/database/temperature_data_base.dart';
+import 'package:temperature/main.dart';
 import 'package:temperature/model/group_by_date_time.dart';
 import 'package:temperature/model/history_element.dart';
 import 'package:temperature/model/measurement_fields.dart';
@@ -36,7 +37,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final _controller = TextEditingController();
+  final _controller = TextEditingController(text: prefs.getString('temperature'));
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +47,13 @@ class _HistoryPageState extends State<HistoryPage> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
                   colors: [
-                MyColors.blandPurple,
-                const Color(0xFFFFFFFF),
-              ])),
+                    MyColors.blandPurple,
+                    const Color(0x006D73E1),
+                  ]
+              )),
           child: SafeArea(
             child: Column(
               children: [
@@ -95,6 +97,9 @@ class _HistoryPageState extends State<HistoryPage> {
                           height: 53,
                           width: 93,
                           child: TextField(
+                            onChanged: (value) {
+                              prefs.setString('temperature', value);
+                            },
                             onEditingComplete: () => setState(() {
                               _controller.text = _controller.text
                                   .replaceAllMapped(RegExp(r'(\d\d)(\d)'),
@@ -159,7 +164,17 @@ class _HistoryPageState extends State<HistoryPage> {
                             itemCount: snapshot.data!.length,
                           );
                         }
-                        return const SizedBox();
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 70),
+                          child: const Text('You have no measurement yet. \n'
+                              'Your records will appear here.',
+                          style: TextStyle(
+                            color: Color(0xFF9D9A96),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,),
+                        );
                       }
                     ),
                   ),

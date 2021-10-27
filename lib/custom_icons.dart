@@ -21,6 +21,7 @@ class CustomIcons {
   static const _kFontFam = 'CustomIcons';
   static const String? _kFontPkg = null;
 
+  static const IconData cross_icon = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData disclosure = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tab_settings = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData history = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);

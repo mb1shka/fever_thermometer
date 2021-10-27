@@ -43,9 +43,10 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-              MyColors.blandPurple,
-              const Color(0x006D73E1),
-            ])),
+                  MyColors.blandPurple,
+                  const Color(0x006D73E1),
+                ]
+            )),
         child: SafeArea(
           child: Center(
             child: Column(
@@ -165,7 +166,7 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
                         ),
                         min: 34,
                         max: 44,
-                        isShowLabel: true,
+                        isShowLabel: false,
                         value: val1,
                         onChange: (valData) {
                           setState(() {

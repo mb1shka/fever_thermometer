@@ -71,11 +71,11 @@ class _AdditionalDataState extends State<AdditionalData> {
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
                 colors: [
                   MyColors.blandPurple,
-                  const Color(0xFFFFFFFF),
+                  const Color(0x006D73E1),
                 ]
             )
         ),

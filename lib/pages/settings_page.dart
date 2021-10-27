@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:temperature/custom_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:temperature/listeners/settings_listener.dart';
+import 'package:temperature/main.dart';
 
 import '../my_colors.dart';
 
@@ -16,10 +17,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
 
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
+  final _heightController = TextEditingController(text: prefs.getString('height'));
+  final _weightController = TextEditingController(text: prefs.getString('weight'));
+  final _nameController = TextEditingController(text: prefs.getString('name'));
+  final _ageController = TextEditingController(text: prefs.getString('age'));
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,13 @@ class _SettingsPageState extends State<SettingsPage> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
                   colors: [
-                MyColors.blandPurple,
-                const Color(0xFFFFFFFF),
-              ])),
+                    MyColors.blandPurple,
+                    const Color(0x006D73E1),
+                  ]
+              )),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -220,6 +222,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             height: 55,
                             width: 160.5,
                             child: TextField(
+                              onChanged: (value) {
+                                prefs.setString('height', value);
+                              },
                               keyboardType: TextInputType.number,
                               style: TextStyle(
                                 fontSize: 19,
@@ -273,6 +278,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             height: 55,
                             width: 171,
                             child: TextField(
+                              onChanged: (value) {
+                                prefs.setString('weight', value);
+                              },
                               keyboardType: TextInputType.number,
                               style: TextStyle(
                                 fontSize: 19,
@@ -325,6 +333,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     height: 55,
                     width: 335,
                     child: TextField(
+                      onChanged: (value) {
+                        prefs.setString('name', value);
+                      },
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.w400,
@@ -372,6 +383,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     height: 55,
                     width: 335,
                     child: TextField(
+                      onChanged: (value) {
+                        prefs.setString('age', value);
+                      },
                       keyboardType: TextInputType.number,
                       style: TextStyle(
                         fontSize: 19,

@@ -1,27 +1,35 @@
 import 'package:flutter/cupertino.dart';
+import 'package:temperature/main.dart';
 
-class SettingsListener with ChangeNotifier{
+class SettingsListener with ChangeNotifier {
+  SettingsListener() {
+    switch (prefs.getInt('sex')) {
+      case 0:
+        _isMale = true;
+        break;
+      case 1:
+        _isFemale = true;
+        break;
+      case 2:
+        _isOther = true;
+        break;
+    }
+  }
+
   bool _isMale = false;
   bool _isFemale = false;
-  bool _isOther = false;/*
-  String heightHintText = 'Enter your height';
-  String weightHintTex = 'Enter your weight';
-  String nameHintTex = 'Enter your name';
-  String ageHintText = 'Enter your age';*/
+  bool _isOther = false;
 
   bool get getMale => _isMale;
   bool get getFemale => _isFemale;
-  bool get getOther => _isOther;/*
-  String get getHeight => heightHintText;
-  String get getWeight => weightHintTex;
-  String get getName => nameHintTex;
-  String get getAge => ageHintText;*/
+  bool get getOther => _isOther;
 
   void changeForMale() {
     _isMale = true;
     _isFemale = false;
     _isOther = false;
     notifyListeners();
+    prefs.setInt('sex', 0);
   }
 
   void changeForFemale() {
@@ -29,6 +37,7 @@ class SettingsListener with ChangeNotifier{
     _isFemale = true;
     _isOther = false;
     notifyListeners();
+    prefs.setInt('sex', 1);
   }
 
   void changeForOther() {
@@ -36,12 +45,6 @@ class SettingsListener with ChangeNotifier{
     _isFemale = false;
     _isOther = true;
     notifyListeners();
+    prefs.setInt('sex', 2);
   }
-/*
-  void changeHeight(String text) {
-    heightHintText = text;
-    notifyListeners();
-  }*/
-
-
 }
