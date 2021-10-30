@@ -17,6 +17,7 @@ class ShowMeasurementDetails extends StatelessWidget {
   final List<Symptoms> symptoms;
   final String notes;
   final DateTime dateTime;
+  final String vaccine;
 
   ShowMeasurementDetails({
     required this.temperature,
@@ -25,6 +26,7 @@ class ShowMeasurementDetails extends StatelessWidget {
     required this.symptoms,
     required this.notes,
     required this.dateTime,
+    required this.vaccine
 });
 
 
@@ -192,6 +194,32 @@ class ShowMeasurementDetails extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(notes,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Text('Vaccine',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(vaccine,
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w400,

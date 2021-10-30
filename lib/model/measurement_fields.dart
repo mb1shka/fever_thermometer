@@ -6,7 +6,7 @@ const String tableMeasurements = 'measurement';
 
 class MeasurementFields {
   static final List<String> values = [
-    temperature, degree, health, symptoms, notes, dateTime
+    temperature, degree, health, symptoms, notes, dateTime, vaccine
   ];
 
   static const String temperature = 'temperature';
@@ -15,6 +15,7 @@ class MeasurementFields {
   static const String symptoms = 'symptoms';
   static const String notes = 'notes';
   static const String dateTime = 'dateTime';
+  static const String vaccine = 'vaccine';
 }
 
 class Measurement {
@@ -24,6 +25,7 @@ class Measurement {
   final List<Symptoms> symptoms;
   final String notes;
   final DateTime dateTime;
+  final String vaccine;
 
   const Measurement({
     required this.temperature,
@@ -31,7 +33,8 @@ class Measurement {
     required this.health,
     required this.symptoms,
     required this.notes,
-    required this.dateTime
+    required this.dateTime,
+    required this.vaccine
   });
 
   Measurement copy({
@@ -41,6 +44,7 @@ class Measurement {
     List<Symptoms>? symptoms,
     String? notes,
     DateTime? dateTime,
+    String? vaccine,
   }) =>
       Measurement(
           temperature: temperature ?? this.temperature,
@@ -49,16 +53,18 @@ class Measurement {
           symptoms: symptoms ?? this.symptoms,
           notes: notes ?? this.notes,
           dateTime: dateTime ?? this.dateTime,
+          vaccine: vaccine ?? this.vaccine
       );
 
   static Measurement fromJson(Map<String, Object?> json) => Measurement(
-      temperature: forceDouble(json[MeasurementFields.temperature] as num),
-      degree: parseDegree(json[MeasurementFields.degree] as String),
-      health: parseHealth(json[MeasurementFields.health] as String),
-      symptoms: parseSymptoms(json[MeasurementFields.symptoms] as String),
-      notes: json[MeasurementFields.notes] as String,
-      dateTime: DateTime
+    temperature: forceDouble(json[MeasurementFields.temperature] as num),
+    degree: parseDegree(json[MeasurementFields.degree] as String),
+    health: parseHealth(json[MeasurementFields.health] as String),
+    symptoms: parseSymptoms(json[MeasurementFields.symptoms] as String),
+    notes: json[MeasurementFields.notes] as String,
+    dateTime: DateTime
           .fromMillisecondsSinceEpoch(json[MeasurementFields.dateTime] as int),
+    vaccine: json[MeasurementFields.vaccine] as String,
   );
 
   static double forceDouble(num i) {
@@ -106,6 +112,7 @@ class Measurement {
     MeasurementFields.symptoms: symptomsArrayToString(symptoms),
     MeasurementFields.notes: notes,
     MeasurementFields.dateTime: dateTime.toUtc().millisecondsSinceEpoch,
+    MeasurementFields.vaccine: vaccine,
   };
 
   static String symptomsArrayToString(List<Symptoms> symptoms) {

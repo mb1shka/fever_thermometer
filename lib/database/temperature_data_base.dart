@@ -35,7 +35,8 @@ class TemperatureDataBase {
     ${MeasurementFields.health} $textType,
     ${MeasurementFields.symptoms} $textType,
     ${MeasurementFields.notes} $textType,
-    ${MeasurementFields.dateTime} $intType
+    ${MeasurementFields.dateTime} $intType,
+    ${MeasurementFields.vaccine} $textType
     )
     ''');
   }

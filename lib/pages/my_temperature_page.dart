@@ -28,11 +28,11 @@ class _MyTemperaturePageState extends State<MyTemperaturePage> {
   bool isC = true;
   bool isF = false;
 
-  double val1 = 34;
+  double val1 = 36.6;
   double val2 = 44;
 
-  String tempValue = '34.0';
-  String tempValueF = '93.0';
+  String tempValue = '36.6';
+  String tempValueF = '97.9';
 
   @override
   Widget build(BuildContext context) {

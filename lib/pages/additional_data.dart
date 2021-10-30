@@ -483,6 +483,7 @@ class _AdditionalDataState extends State<AdditionalData> {
                           symptoms: _save(),
                           notes: _notesController.text,
                           dateTime: _dateTime,
+                          vaccine: _vaccineController.text,
                         ));
                         //Navigator.pop(context);
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));

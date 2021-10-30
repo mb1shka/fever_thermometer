@@ -71,7 +71,7 @@ class HistoryElement extends StatelessWidget {
                       symptoms: measurement.symptoms,
                       notes: measurement.notes,
                       dateTime: measurement.dateTime,
-                      // measurement.dateTime,
+                      vaccine: measurement.vaccine,
                     ),
                   )
               ),
@@ -84,7 +84,7 @@ class HistoryElement extends StatelessWidget {
               ),
               child: Icon(
                 CustomIcons.disclosure,
-                color: MyColors.grey,
+                color: MyColors.orange,
                 size: 16,
               ),
             ),
