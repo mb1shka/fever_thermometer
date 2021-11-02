@@ -44,7 +44,7 @@ class IntroScreen extends StatelessWidget {
                   'the fever got.',
               svgPicture: 'assets/svg/listSecond.svg',
               onNext: _onNext,
-              height: 63,
+              height: 33,
             ),
             IntroWidget(
               title: 'Health insights',
@@ -56,7 +56,7 @@ class IntroScreen extends StatelessWidget {
                 prefs.setBool('isFirstRun', false);
                 Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentPage()));
               },
-              height: 63,
+              height: 33,
             ),
             //3 странички без скэффолда
           ],

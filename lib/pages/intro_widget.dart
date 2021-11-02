@@ -22,45 +22,47 @@ class IntroWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(height: height,),
-        SvgPicture.asset(svgPicture),
-        const SizedBox(height: 46,),
-        Text(title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 28,
-          ),
-        ),
-        const SizedBox(height: 13,),
-        Text(description,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 20,
-          ),
-        ),
-        const SizedBox(height: 39,),
-        ElevatedButton(
-          onPressed: onNext,
-          child: const Text(
-            'Next',
-            style: TextStyle(
-              fontSize: 20,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: height,),
+          SvgPicture.asset(svgPicture),
+          const SizedBox(height: 26,),
+          Text(title,
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
+              fontSize: 28,
             ),
           ),
-          style: ElevatedButton.styleFrom(
-              primary: MyColors.orange,
-              fixedSize: const Size(327, 60),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              )),
-        ),
-      ],
+          const SizedBox(height: 8,),
+          Text(description,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
+            ),
+          ),
+          const SizedBox(height: 39,),
+          ElevatedButton(
+            onPressed: onNext,
+            child: const Text(
+              'Next',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: MyColors.orange,
+                fixedSize: const Size(327, 60),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                )),
+          )
+        ],
+      ),
     );
   }
 
